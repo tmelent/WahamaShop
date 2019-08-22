@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Wahama.ProductFraction>
+
+<style>
+
+    h2 {
+        text-align: center;
+        padding-bottom: 2rem;
+    }
+
+    body {
+        display: inline !important;
+    }
+
+    #Fractions {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+        #Fractions > a {
+            font-size: 1.25rem;
+            color: black;
+            text-decoration: none;
+        }
+</style>
+<h2>
+    @{var setting = Model.Select(p => p.ProductAlliance.Title).FirstOrDefault();}
+@setting
+</h2>
+
+
+<div class="row text-center">
+
+    @foreach (var item in Model)
+    {
+        <div class="col-3" id="Fractions">
+            <a asp-controller="Categories" asp-action="ProductListing" asp-route-fraction="@item.Title">
+                <img style="height:6rem" src="@item.ImageSource" />
+                <br />
+                <br />
+                @item.Title
+            </a>
+
+        </div>
+    }
+
+</div>
+
+

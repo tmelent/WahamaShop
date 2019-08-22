@@ -1,0 +1,122 @@
+﻿@model ProductsViewModel
+
+@{
+    ViewData["Title"] = "ProductView";
+    var item = Model.Products.First();
+    var imageSource = Model.ImageSources.Where(p => p.Key == item.Id).SingleOrDefault();
+}
+<style>
+    a {
+        color: black;
+        text-decoration: none;
+    }
+
+        a:hover {
+            color: black;
+        }
+
+        a#backref {
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+        background-color: #e0e0e0 !important;
+        color: #000;
+    }
+
+    .btn {
+        /*box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);*/
+        padding: .84rem 2.14rem;
+        font-size: .81rem;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        
+        border: 0;
+        border-radius: .225rem;
+        text-transform: uppercase;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+        .btn:hover {
+            color: #212529 !important;
+            text-decoration: none !important;
+            box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15);
+            outline: 0;
+        }
+
+    .btn-primary:hover {
+        border-color: #dae0e5 !important;
+    }
+</style>
+<div class="toast" data-delay="3000" style="position: absolute; bottom: 0; left: 1rem;">
+    <div class="toast-header">
+
+        <strong class="mr-auto">Wahama Shop</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="toast-body">
+        Товар был успешно добавлен в корзину!
+    </div>
+</div>
+
+
+<div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Alliances" asp-action="Index" asp-route-settingName="@ViewBag.setting">@ViewBag.setting</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Fractions" asp-action="Index" asp-route-allianceName="@ViewBag.alliance">@ViewBag.alliance</a></li>
+            <li class="breadcrumb-item"><a asp-action="ProductListing" asp-route-fraction="@item.ProductFraction.Title">@item.ProductFraction.Title</a></li>
+        </ol>
+    </nav>
+
+    <h3>@item.ProductFraction.Title - @item.Name</h3>
+
+    <hr />
+    <div>
+
+        <a id="backref" asp-controller="Categories" asp-action="ProductListing" asp-route-fraction="@ViewBag.fraction">← Вернуться</a>
+    </div>
+
+    <img src="@imageSource.Value" style="width:25rem" />
+    <div class="jumbotron" style="padding-top:2.5rem; padding-bottom:2.5rem">
+        @item.Description
+    </div>
+
+
+    <h4 style="text-align:end">Цена: @item.Price ₽ </h4>
+    <div class="d-flex justify-content-end" style="margin-top:2rem">
+        <input type="number" class="form-control align-self-center" id="quantity" style="height:3rem;width:4.25rem; padding-right:1rem;" value="1" />
+    <input type="submit" onclick="AddToCart(@item.Id)" value="В корзину" class="btn ml-3 btn-primary align-items-end">
+    </div>
+
+
+</div>
+
+<script>
+    function AddToCart (productId) {
+        var param = {
+            quantity: $('#quantity').val(),
+            productId: productId,
+            userId: "CurrentUser"
+        };
+        $.ajax({
+        url: '@Url.Content("~/")' + 'ShoppingCarts/AddToCart',
+        contentType: "application/x-www-form-urlencoded",
+        type: "POST",
+        datatype: "json",
+        data: param,
+        error: function (xmlHttpRequest, errorText, thrownError) {
+            alert(xmlHttpRequest+"|"+errorText+"|"+thrownError);
+        },
+        success: function (data) {
+            if (data != null) {
+                $('.toast').toast('show');
+            }
+        }
+    });
+    }
+
+
+</script>
