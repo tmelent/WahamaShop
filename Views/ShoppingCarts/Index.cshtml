@@ -4,89 +4,148 @@
     ViewData["Title"] = "Index";
 }
 <style>
-    .table td{
-        vertical-align:middle;
+    .table td {
+        vertical-align: middle;
     }
 
-    .table th{
-        width:15%;
+    .table th {
+        width: 15%;
     }
-    a{
-        cursor:pointer;
+
+    a {
+        cursor: pointer;
     }
+
     input {
-        padding-left:.5rem;
+        padding-left: .5rem;
     }
 
-    h2{
-        padding-bottom: 5rem;
+    h2 {
+        padding-bottom: 1.5rem;
     }
-</style>
-<h2>Корзина покупок</h2>
 
-<div class="toast" data-delay="3000" style="position: absolute; bottom: 0; left: 1rem;">
-    <div class="toast-header">
+    h3 {
+        margin-top: 1.5rem;
+        padding-bottom: 1rem
+    }
 
-        <strong class="mr-auto">Wahama Shop</strong>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="toast-body">
-        Изменения в корзине применены успешно!
-    </div>
-</div>
+    h5 {
+        padding-bottom: 2.5rem
+    }
 
-<table class="table table-responsive">
-    <thead>
-        <tr>
-            <th>
-                Изображение
-            </th>
-            <th>
-                Наименование
-            </th>
-            <th>
-                Количество
-            </th>
-            <th>Цена</th>
-            <th><span class="spinner-grow spinner-grow-sm d-none" role="status" aria-hidden="true"></span></th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.CartItem == null)
-            {
-                                
-            }
+    #feelings {
+        -webkit-box-shadow: 0px 0px 18px 9px rgba(0,0,0,0.17);
+        -moz-box-shadow: 0px 0px 18px 9px rgba(0,0,0,0.17);
+        box-shadow: 0px 0px 18px 9px rgba(0,0,0,0.17);
+    }
+
+    #totalCost{
+        text-align:right !important;
+    }
         
-        @foreach (var item in Model.CartItem)
-        {
+</style>
+
+
+<h2>Корзина покупок</h2>
+<hr />
+@if (!Model.CartItem.Any())
+{
+    <h3>В вашей корзине пока ничего нет :(</h3>
+    <h5>Но вы можете пополнить её прямо <a href="~/">сейчас.</a></h5>
+    <div class="d-flex justify-content-center"><img id="feelings" style="width:20rem" src="https://pp.userapi.com/MTA47L2RGvVjgXx6MrUgSpJLEK2cFKztJq8dMA/1zcGnFknZDs.jpg" /></div>
+}
+else
+{
+    <div class="toast" data-delay="3000" style="position: absolute; bottom: 0; left: 1rem;">
+        <div class="toast-header">
+
+            <strong class="mr-auto">Wahama Shop</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
+            Изменения в корзине применены успешно!
+        </div>
+    </div>
+
+    <table class="table table-responsive">
+        <thead>
             <tr>
-                <td>
-                    <img style="width:10.5rem"src="@Html.DisplayFor(modelItem => modelItem.ImageSources[item.Product.Id])" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.Name)
-                </td>
-                <td>
-                    <input type="number" style="width:70%" id="quantityInput" value="@item.Quantity" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Product.Price)
-                </td>
-                <td>
-                    <a onclick="ChangeQuantity(@item.ProductId, @item.Quantity)">Обновить</a>
-                </td>
-                <td>
-                    <a onclick="RemoveFromCart(@item.ProductId)">Удалить</a>
-                </td>
+                <th>
+                    Изображение
+                </th>
+                <th>
+                    Наименование
+                </th>
+                <th>
+                    Количество
+                </th>
+                <th>Цена</th>
+                <th></th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+
+        <tbody>
+
+
+            @foreach (var item in Model.CartItem)
+            {
+                string inputId = "quantityInput" + item.ProductId.ToString();
+                <tr>
+                    <td>
+                        <img style="width:10.5rem" src="@Html.DisplayFor(modelItem => modelItem.ImageSources[item.Product.Id])" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Product.Name)
+                    </td>
+                    <td>
+                        <input type="number" style="width:70%" class="quantity" id="@inputId" value="@item.Quantity" />
+                    </td>
+                    <td class="price">
+                        @Html.DisplayFor(modelItem => item.Product.Price)
+                    </td>
+                    <td>
+                        <a onclick="ChangeQuantity(@item.ProductId, @item.Quantity)">Обновить</a>
+                    </td>
+                    <td>
+                        <a onclick="RemoveFromCart(@item.ProductId)">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3 id="totalCost" class=""></h3>
+}
 
 <script>
+    $(document).ready(function GetTotalCost()
+    {
+        var param = {            
+            userId: "CurrentUser"
+        };
+        $.ajax({
+            url: '@Url.Content("~/")' + 'ShoppingCarts/GetTotalCost',
+            contentType: "application/x-www-form-urlencoded",
+            type: "POST",
+            datatype: "json",
+            data: param,
+            error: function (xmlHttpRequest, errorText, thrownError) {
+                alert(xmlHttpRequest + "|" + errorText + "|" + thrownError);
+            },
+            success: function (data) {
+                if (data != null) {                    
+                    $('#totalCost').html("Сумма: " + data + " ₽");
+                    $('#totalCost').addClass("ml-auto").css("text-align:right");
+
+                }
+            }
+        });
+
+    });
+
     function RemoveFromCart(productId) {
         var _this = $(this);
         var param = {
@@ -115,8 +174,9 @@
 
     function ChangeQuantity(productId, oldQuantity) {
         var _this = $(this);
+        var qElementId = "#quantityInput" + productId;
         var param = {
-            quantityDifference:$('#quantityInput').val() - oldQuantity,
+            quantityDifference:$(qElementId).val() - oldQuantity,
             productId: productId,
             userId: "CurrentUser"
         };
@@ -132,11 +192,13 @@
             success: function (data) {
                 if (data != null) {
                     $('.toast').toast('show');
+                    location.reload();
                 }
             },
 
         });
     }
+
 
 
 </script>

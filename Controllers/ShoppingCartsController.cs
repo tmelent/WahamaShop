@@ -41,7 +41,7 @@ namespace Wahama.Controllers
         public async Task<IActionResult> RemoveFromCart(int quantityDifference, int productId, string userId)
         {
             ShoppingCart alreadyExistedItem = _context.ShoppingCart.Where(p => p.ProductId == productId && p.UserId == userId).SingleOrDefault();
-            if ((quantityDifference == 0) || ((alreadyExistedItem.Quantity - quantityDifference) <= 0))
+            if ((quantityDifference == 0) || ((alreadyExistedItem.Quantity + quantityDifference) <= 0))
             {
                 alreadyExistedItem.Quantity = 0;
             }
@@ -61,6 +61,17 @@ namespace Wahama.Controllers
             return RedirectToAction("Index");
         }
 
+        public int GetTotalCost(string userId)
+        {
+            int totalCost = 0;
+            var userShoppingCart = _context.ShoppingCart.Where(p => p.UserId == userId).Include(s => s.Product).ToList();
+            foreach (var item in userShoppingCart)
+            {
+                totalCost = item.Quantity * item.Product.Price;
+            }
+            return totalCost;
+
+        }
 
         // GET: ShoppingCarts
         public IActionResult Index()

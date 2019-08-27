@@ -88,8 +88,8 @@
                         <h5 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h5>
                     </a>
                     <p class="card-text">@item.ShortDescription</p>
-
-                    <input type="number" class="form-control" id="quantity" style="width:40%; justify-content:end" value="1" />
+                    @{string p = "quantity" + item.Id.ToString();}
+                    <input type="number" class="form-control" id="@p" style="width:40%; justify-content:end" value="1" />
                     <input type="submit" onclick="AddToCart(@item.Id)" value="@item.Price ₽" class="btn btn-primary align-items-end">
                 </div>
             </div>
@@ -100,9 +100,10 @@
 
 
 <script>
-    function AddToCart (productId) {
+    function AddToCart(productId) {
+        var qElementNumber = "#quantity" + productId
         var param = {
-            quantity: $('#quantity').val(),
+            quantity: $(qElementNumber).val(),
             productId: productId,
             userId: "CurrentUser"
         };

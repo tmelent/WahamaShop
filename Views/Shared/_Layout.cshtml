@@ -32,7 +32,24 @@
         body {
             background: url(/images/background.png) fixed; /* Цвет заливки и путь к зафиксированному фоновому изображению */
         }
+        .navbar-brand{
+            padding-right:1rem;
+            font-size:1.15rem;
+            padding-bottom:0;
+            font-weight:600;
+        }
+        .nav-item{
+            padding-right: 1rem;
+            
 
+        }
+        .nav-link{
+            font-size:1.15rem;
+
+        }
+        .active{
+            font-weight:500;
+        }
         .fill_white {
             background-color: #fff;
             padding:2.5rem;
@@ -44,7 +61,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="/">Wahama</a>
+            <a class="navbar-brand pt-0" href="/">Wahama</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -52,19 +69,22 @@
             <div class="collapse navbar-collapse" id="navbarsExample05">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-                    </li>                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="~/Products">Products</a>
-                    </li>
-                    
+                        <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
+                    </li>                 
+                                        
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Игровые системы</a>
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown05" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Сеттинги</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown05">
                             <a class="dropdown-item" asp-controller="Alliances"  asp-action="Index" asp-route-settingName="Warhammer 40,000">Warhammer 40K</a>
                             <a class="dropdown-item" asp-controller="Alliances" asp-action="Index" asp-route-settingName="Age of Sigmar">Age of Sigmar</a>
                             <a class="dropdown-item" asp-controller="Alliances" asp-action="Index" asp-route-settingName="Malifaux">Malifaux</a>
                         </div>
+                    </li>
+                    
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item ml-auto  flex-row">
+                        <a asp-controller="ShoppingCarts" asp-action="Index"><img style="width:1.5rem" src="~/images/cart.png" /></a>
                     </li>
                 </ul>
                
