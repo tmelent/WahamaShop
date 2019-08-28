@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Wahama.Models;
 
 namespace Wahama
 {
@@ -14,6 +15,8 @@ namespace Wahama
             : base(options)
         {
         }
+        public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
 
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<Check> Check { get; set; }
@@ -260,6 +263,20 @@ namespace Wahama
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WarehouseProducts_WarehouseList");
             });
+
+            string adminRoleName = "admin";
+            string userRoleName = "user";
+
+            string adminEmail = "ins4n3.owo@gmail.com";
+            string adminPassword = "liber_ahu_PORVALO";
+            
+            Role adminRole = new Role { Id = 1, Name = adminRoleName };
+            Role userRole = new Role { Id = 2, Name = userRoleName };
+            User adminUser = new User { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id };
+
+            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
+            modelBuilder.Entity<User>().HasData(new User[] { adminUser });
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

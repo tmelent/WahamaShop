@@ -38,16 +38,16 @@ namespace Wahama.Controllers
 
         // Remove Items from Cart
         [HttpPost]
-        public async Task<IActionResult> RemoveFromCart(int quantityDifference, int productId, string userId)
+        public async Task<IActionResult> RemoveFromCart(int? quantityDifference, int productId, string userId)
         {
             ShoppingCart alreadyExistedItem = _context.ShoppingCart.Where(p => p.ProductId == productId && p.UserId == userId).SingleOrDefault();
-            if ((quantityDifference == 0) || ((alreadyExistedItem.Quantity + quantityDifference) <= 0))
+            if ((quantityDifference == null) || ((alreadyExistedItem.Quantity + quantityDifference) <= 0))
             {
                 alreadyExistedItem.Quantity = 0;
             }
             else
             {
-                alreadyExistedItem.Quantity += quantityDifference;
+                alreadyExistedItem.Quantity += (int)quantityDifference;
             }
             if (alreadyExistedItem.Quantity == 0)
             {
@@ -67,7 +67,7 @@ namespace Wahama.Controllers
             var userShoppingCart = _context.ShoppingCart.Where(p => p.UserId == userId).Include(s => s.Product).ToList();
             foreach (var item in userShoppingCart)
             {
-                totalCost = item.Quantity * item.Product.Price;
+                totalCost += item.Quantity * item.Product.Price;
             }
             return totalCost;
 

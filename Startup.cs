@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Wahama.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Wahama
 {
@@ -18,8 +20,14 @@ namespace Wahama
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
            
-            services.AddDbContext<WarhammerContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);
+            services.AddDbContext<WarhammerContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options => //CookieAuthenticationOptions
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
             services.AddMvc();
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -32,8 +40,9 @@ namespace Wahama
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

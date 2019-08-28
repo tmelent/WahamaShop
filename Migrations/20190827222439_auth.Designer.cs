@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wahama;
 
 namespace Wahama.Migrations
 {
     [DbContext(typeof(WarhammerContext))]
-    partial class WarhammerContextModelSnapshot : ModelSnapshot
+    [Migration("20190827222439_auth")]
+    partial class auth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -113,24 +115,6 @@ namespace Wahama.Migrations
                     b.ToTable("Customer");
                 });
 
-            modelBuilder.Entity("Wahama.Models.Role", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-
-                    b.HasData(
-                        new { Id = 1, Name = "admin" },
-                        new { Id = 2, Name = "user" }
-                    );
-                });
-
             modelBuilder.Entity("Wahama.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -141,17 +125,9 @@ namespace Wahama.Migrations
 
                     b.Property<string>("Password");
 
-                    b.Property<int?>("RoleId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new { Id = 1, Email = "ins4n3.owo@gmail.com", Password = "liber_ahu_PORVALO", RoleId = 1 }
-                    );
                 });
 
             modelBuilder.Entity("Wahama.Order", b =>
@@ -427,13 +403,6 @@ namespace Wahama.Migrations
                         .WithMany("Customer")
                         .HasForeignKey("AddressId")
                         .HasConstraintName("FK_Customer_Address");
-                });
-
-            modelBuilder.Entity("Wahama.Models.User", b =>
-                {
-                    b.HasOne("Wahama.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId");
                 });
 
             modelBuilder.Entity("Wahama.Order", b =>
