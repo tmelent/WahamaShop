@@ -19,7 +19,7 @@
             font-size: 1rem;
         }
 
-        .btn-primary {
+    .btn-primary {
         background-color: #e0e0e0 !important;
         color: #000;
     }
@@ -29,7 +29,6 @@
         padding: .84rem 2.14rem;
         font-size: .81rem;
         transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-        
         border: 0;
         border-radius: .225rem;
         text-transform: uppercase;
@@ -78,17 +77,21 @@
 
         <a id="backref" asp-controller="Categories" asp-action="ProductListing" asp-route-fraction="@ViewBag.fraction">← Вернуться</a>
     </div>
+    <div class="row">
+        <div class="col-5">
+            <img src="@imageSource.Value" style="width:25rem" />
+        </div>
+        <div class="col-7" style="padding-top:2.5rem; padding-bottom:2.5rem">
+            <h3>Описание</h3>
+            <hr />
+            @item.Description
+        </div>
 
-    <img src="@imageSource.Value" style="width:25rem" />
-    <div class="jumbotron" style="padding-top:2.5rem; padding-bottom:2.5rem">
-        @item.Description
     </div>
-
-
     <h4 style="text-align:end">Цена: @item.Price ₽ </h4>
     <div class="d-flex justify-content-end" style="margin-top:2rem">
         <input type="number" class="form-control align-self-center" id="quantity" style="height:3rem;width:4.25rem; padding-right:1rem;" value="1" />
-    <input type="submit" onclick="AddToCart(@item.Id)" value="В корзину" class="btn ml-3 btn-primary align-items-end">
+        <input type="submit" onclick="AddToCart(@item.Id)" value="В корзину" class="btn ml-3 btn-primary align-items-end">
     </div>
 
 

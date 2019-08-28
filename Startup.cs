@@ -19,8 +19,8 @@ namespace Wahama
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-           
-            services.AddDbContext<WarhammerContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);            
+
+            services.AddDbContext<WarhammerContext>(options => options.UseSqlServer(connection), ServiceLifetime.Transient);
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options => //CookieAuthenticationOptions
                 {
