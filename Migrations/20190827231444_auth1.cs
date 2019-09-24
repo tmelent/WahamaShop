@@ -34,11 +34,7 @@ namespace Wahama.Migrations
                 table: "Roles",
                 columns: new[] { "Id", "Name" },
                 values: new object[] { 2, "user" });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Email", "Password", "RoleId" },
-                values: new object[] { 1, "ins4n3.owo@gmail.com", "liber_ahu_PORVALO", 1 });
+            
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",

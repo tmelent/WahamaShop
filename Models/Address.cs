@@ -16,8 +16,8 @@ namespace Wahama
         public string City { get; set; }
         public string Station { get; set; }
         public string Flat { get; set; }
-        public int Floor { get; set; }
-        public int Zip { get; set; }
+        public string Floor { get; set; }
+        public string Zip { get; set; }
         public string Country { get; set; }
 
         public ICollection<Customer> Customer { get; set; }

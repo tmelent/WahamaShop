@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Wahama.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System;
+using Wahama.Controllers;
+using System.Linq;
 
 namespace Wahama
 {
@@ -32,6 +35,9 @@ namespace Wahama
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            WarhammerContext _context = new WarhammerContext();
+            AccountController accountController = new AccountController(_context);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -44,6 +50,35 @@ namespace Wahama
             app.UseStaticFiles();
             app.UseAuthentication();
 
+            app.Use(async (context, next) =>
+        {
+
+            string GuidId = "";
+            if (context.Request.Cookies.ContainsKey("UnauthorizedID"))
+            {
+                GuidId = context.Request.Cookies["UnauthorizedID"];
+            }
+            else
+            {
+                GuidId = Guid.NewGuid().ToString();
+                context.Response.Cookies.Append("UnauthorizedID", GuidId, new Microsoft.AspNetCore.Http.CookieOptions { Expires = DateTime.Now.AddDays(14) });
+            }
+            if (!_context.Users.Any(p => p.Login == GuidId))
+            {
+                await accountController.Register(new ViewModels.RegisterModel
+                {
+                    Login = GuidId,
+                    Password = accountController.HashPassword(GuidId),
+                    FirstName = "Temporary",
+                    LastName = "Account",
+                    PhoneNumber = "+70000000",
+                    ExpirationDate = DateTime.Now.AddDays(14)
+                }, true);
+            }
+            
+            await next();
+        });
+            accountController.Dispose();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

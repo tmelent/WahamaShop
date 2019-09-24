@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20190805144222_init1.cs" />
     <Compile Remove="Migrations\20190805144222_init1.Designer.cs" />
+    <Compile Remove="Migrations\20190923194226_IT.cs" />
+    <Compile Remove="Migrations\20190923194226_IT.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Views\Order\" />
     <Folder Include="Views\ProductView\" />
   </ItemGroup>
 

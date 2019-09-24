@@ -57,7 +57,7 @@
 </style>
 
 
-<div class="toast" data-delay="3000" style="position: absolute; bottom: 0; left: 1rem;">
+<div class="toast" data-delay="3000" style="position: absolute; top: 5.2rem; right: 2rem;">
     <div class="toast-header">
 
         <strong class="mr-auto">Wahama Shop</strong>
@@ -104,8 +104,7 @@
         var qElementNumber = "#quantity" + productId
         var param = {
             quantity: $(qElementNumber).val(),
-            productId: productId,
-            userId: "CurrentUser"
+            productId: productId            
         };
         $.ajax({
         url: '@Url.Content("~/")' + 'ShoppingCarts/AddToCart',

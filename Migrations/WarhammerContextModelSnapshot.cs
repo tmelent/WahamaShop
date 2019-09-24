@@ -42,7 +42,7 @@ namespace Wahama.Migrations
                     b.Property<string>("Flat")
                         .HasMaxLength(10);
 
-                    b.Property<int>("Floor");
+                    b.Property<string>("Floor");
 
                     b.Property<string>("Station")
                         .HasMaxLength(50);
@@ -51,7 +51,7 @@ namespace Wahama.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int>("Zip");
+                    b.Property<string>("Zip");
 
                     b.HasKey("Id");
 
@@ -69,9 +69,11 @@ namespace Wahama.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("date");
 
+                    b.Property<bool>("IsPaid");
+
                     b.Property<int>("PaymentMethodId");
 
-                    b.Property<int>("SellerId");
+                    b.Property<int?>("SellerId");
 
                     b.Property<int>("Total");
 
@@ -127,7 +129,9 @@ namespace Wahama.Migrations
 
                     b.HasData(
                         new { Id = 1, Name = "admin" },
-                        new { Id = 2, Name = "user" }
+                        new { Id = 2, Name = "user" },
+                        new { Id = 3, Name = "moderator" },
+                        new { Id = 4, Name = "employee" }
                     );
                 });
 
@@ -137,11 +141,13 @@ namespace Wahama.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email");
+                    b.Property<DateTime?>("ExpirationDate");
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
+
+                    b.Property<string>("Login");
 
                     b.Property<string>("Password");
 
@@ -154,10 +160,6 @@ namespace Wahama.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new { Id = 1, Email = "ins4n3.owo@gmail.com", Password = "liber_ahu_PORVALO", RoleId = 1 }
-                    );
                 });
 
             modelBuilder.Entity("Wahama.Order", b =>
@@ -168,7 +170,9 @@ namespace Wahama.Migrations
 
                     b.Property<int>("CheckId");
 
-                    b.Property<int>("ShoppingCartId");
+                    b.Property<int?>("ShoppingCartId");
+
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -355,8 +359,7 @@ namespace Wahama.Migrations
 
                     b.Property<int>("Quantity");
 
-                    b.Property<string>("UserId")
-                        .IsRequired();
+                    b.Property<int>("UserId");
 
                     b.HasKey("Id");
 
@@ -421,10 +424,9 @@ namespace Wahama.Migrations
                         .HasForeignKey("PaymentMethodId")
                         .HasConstraintName("FK_Check_PaymentMethod");
 
-                    b.HasOne("Wahama.Seller", "Seller")
+                    b.HasOne("Wahama.Seller")
                         .WithMany("Check")
-                        .HasForeignKey("SellerId")
-                        .HasConstraintName("FK_Check_Seller");
+                        .HasForeignKey("SellerId");
                 });
 
             modelBuilder.Entity("Wahama.Customer", b =>
@@ -449,10 +451,9 @@ namespace Wahama.Migrations
                         .HasForeignKey("CheckId")
                         .HasConstraintName("FK_Order_Check");
 
-                    b.HasOne("Wahama.ShoppingCart", "ShoppingCart")
+                    b.HasOne("Wahama.ShoppingCart")
                         .WithMany("Order")
-                        .HasForeignKey("ShoppingCartId")
-                        .HasConstraintName("FK_Order_ShoppingCart");
+                        .HasForeignKey("ShoppingCartId");
                 });
 
             modelBuilder.Entity("Wahama.Product", b =>

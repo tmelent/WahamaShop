@@ -1,0 +1,168 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Оформление заказа";
+}
+
+<style>
+    form {
+        margin-top: 5rem;
+    }
+
+    input {
+        margin-bottom: 1.5rem;
+    }
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        width: 15%;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    
+
+    h2 {
+        padding-bottom: 1.5rem;
+    }
+
+    h3 {
+        margin-top: 1.5rem;
+        padding-bottom: 1rem
+    }
+
+    h5 {
+        padding-bottom: 2.5rem
+    }
+
+
+    button {
+    }
+
+    #totalCost {
+        text-align: right !important;
+    }
+</style>
+
+<h2>Оформление заказа</h2>
+
+
+<table class="table table-responsive">
+    <thead>
+        <tr>
+
+            <th>
+                Изображение
+            </th>
+            <th>
+                Наименование
+            </th>
+            <th>
+                Кол-во
+            </th>
+            <th>Цена</th>
+
+        </tr>
+    </thead>
+
+    <tbody>
+
+
+
+        @foreach (var item in Model.CartItem)
+        {
+            string inputId = "quantityInput" + item.ProductId.ToString();
+            <tr>
+                <td>
+                    <img style="width:8.5rem" src="@Html.DisplayFor(modelItem => modelItem.ImageSources[item.Product.Id])" />
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Name)
+                </td>
+
+                <td>
+                    @item.Quantity
+                </td>
+
+                <td class="price">
+                    @Html.DisplayFor(modelItem => item.Product.Price)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<h3 id="totalCost">Итого: @ViewBag.Total ₽</h3>
+<hr />
+<form asp-action="MakeOrder" asp-controller="ShoppingCarts" asp-anti-forgery="true">
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div>
+        <div>
+            <label asp-for="Customer.FirstName">Имя</label><br />
+            <input type="text" asp-for="Customer.FirstName" />
+            <span asp-validation-for="Customer.FirstName" />
+
+        </div>
+        <div>
+            <label asp-for="Customer.LastName">Фамилия</label><br />
+            <input type="text" asp-for="Customer.LastName" />
+            <span asp-validation-for="Customer.LastName" />
+        </div>
+        <div>
+            <label asp-for="Customer.Phone">Номер телефона</label><br />
+            <input type="tel" asp-for="Customer.Phone" />
+            <span asp-validation-for="Customer.Phone" />
+        </div>
+
+
+        <div>
+            <label asp-for="Address.Country">Страна</label><br />
+            <input type="text" asp-for="Address.Country" />
+            <span asp-validation-for="Address.Country" />
+        </div>
+        <div>
+            <label asp-for="Address.City">Город</label><br />
+            <input type="text" asp-for="Address.City" />
+            <span asp-validation-for="Address.City" />
+        </div>
+        <div>
+            <label asp-for="Address.Street">Улица</label><br />
+            <input type="text" asp-for="Address.Street" />
+            <span asp-validation-for="Address.Street" />
+        </div>
+        <div>
+            <label asp-for="Address.Building">Дом</label><br />
+            <input type="text" asp-for="Address.Building" />
+            <span asp-validation-for="Address.Building" />
+        </div>
+        <div>
+            <label asp-for="Address.Flat">Квартира</label><br />
+            <input type="text" asp-for="Address.Flat" />
+            <span asp-validation-for="Address.Flat" />
+        </div>
+        <div>
+            <label asp-for="Address.Floor">Этаж</label><br />
+            <input type="text" asp-for="Address.Floor" />
+            <span asp-validation-for="Address.Floor" />
+        </div>
+        <div>
+            <label asp-for="Address.Zip">Индекс</label><br />
+            <input type="text" asp-for="Address.Zip" />
+            <span asp-validation-for="Address.Zip" />
+        </div>
+        <div>
+            <label asp-for="Address.Station">Ближайшая ст. метро</label><br />
+            <input type="text" asp-for="Address.Station" />
+            <span asp-validation-for="Address.Station" />
+        </div>
+
+        <input type="submit" value="Оформить заказ" />
+    </div>
+</form>

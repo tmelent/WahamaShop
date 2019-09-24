@@ -139,7 +139,7 @@ namespace Wahama.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Login");
 
                     b.Property<string>("FirstName");
 
@@ -158,7 +158,7 @@ namespace Wahama.Migrations
                     b.ToTable("Users");
 
                     b.HasData(
-                        new { Id = 1, Email = "ins4n3.owo@gmail.com", Password = "liber_ahu_PORVALO", RoleId = 1 }
+                        new { Id = 1, Login = "ins4n3.owo@gmail.com", Password = "liber_ahu_PORVALO", RoleId = 1 }
                     );
                 });
 
@@ -170,13 +170,13 @@ namespace Wahama.Migrations
 
                     b.Property<int>("CheckId");
 
-                    b.Property<int>("ShoppingCartId");
+                    
 
                     b.HasKey("Id");
 
                     b.HasIndex("CheckId");
 
-                    b.HasIndex("ShoppingCartId");
+                    
 
                     b.ToTable("Order");
                 });
@@ -451,10 +451,7 @@ namespace Wahama.Migrations
                         .HasForeignKey("CheckId")
                         .HasConstraintName("FK_Order_Check");
 
-                    b.HasOne("Wahama.ShoppingCart", "ShoppingCart")
-                        .WithMany("Order")
-                        .HasForeignKey("ShoppingCartId")
-                        .HasConstraintName("FK_Order_ShoppingCart");
+                   
                 });
 
             modelBuilder.Entity("Wahama.Product", b =>

@@ -83,12 +83,7 @@ namespace Wahama
                     .HasForeignKey(d => d.PaymentMethodId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Check_PaymentMethod");
-
-                entity.HasOne(d => d.Seller)
-                    .WithMany(p => p.Check)
-                    .HasForeignKey(d => d.SellerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Check_Seller");
+                
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -119,12 +114,7 @@ namespace Wahama
                     .HasForeignKey(d => d.CheckId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Check");
-
-                entity.HasOne(d => d.ShoppingCart)
-                    .WithMany(p => p.Order)
-                    .HasForeignKey(d => d.ShoppingCartId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_ShoppingCart");
+                
             });
 
             modelBuilder.Entity<PaymentMethod>(entity =>
@@ -262,20 +252,17 @@ namespace Wahama
                     .HasForeignKey(d => d.WarehouseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_WarehouseProducts_WarehouseList");
-            });
-
-            string adminRoleName = "admin";
-            string userRoleName = "user";
-
-            string adminEmail = "ins4n3.owo@gmail.com";
-            string adminPassword = "liber_ahu_PORVALO";
+            });         
             
-            Role adminRole = new Role { Id = 1, Name = adminRoleName };
-            Role userRole = new Role { Id = 2, Name = userRoleName };
-            User adminUser = new User { Id = 1, Email = adminEmail, Password = adminPassword, RoleId = adminRole.Id };
+            
+            Role adminRole = new Role { Id = 1, Name = "admin" };
+            Role userRole = new Role { Id = 2, Name = "user" };
+            Role moderatorRole = new Role { Id = 3, Name = "moderator" };
+            Role employeeRole = new Role { Id = 4, Name = "employee" };
+            
 
-            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
-            modelBuilder.Entity<User>().HasData(new User[] { adminUser });
+            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole, moderatorRole, employeeRole });
+            
             base.OnModelCreating(modelBuilder);
         }
     }

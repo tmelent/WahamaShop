@@ -51,17 +51,17 @@
 
 <h5>Еще не зарегистрированы? Вы можете сделать это прямо <a asp-action="Register" asp-controller="Account">сейчас.</a></h5>
 <div class="row">
-    <div class="col-4">
+    <div class="col-md-4">
         <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
             <div class="validation" asp-validation-summary="ModelOnly"></div>
             <div class="validation-error">
-                <span asp-validation-for="Email" />
+                <span asp-validation-for="Login" />
             </div>
             <div class="input-group">
                 <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">E-mail</span>
                 </div>
-                <input class="form-control" type="text" asp-for="Email" />
+                <input class="form-control" type="text" asp-for="Login" />
             </div>
             <div class="validation-error">
                 <span asp-validation-for="Password" />
@@ -74,7 +74,7 @@
             </div>
 
             <div class="form-group">
-                <input type="checkbox" class="checkbox" /> <span>Запомнить меня</span>
+                <input type="checkbox" asp-for="RememberMe" class="checkbox" /> <span>Запомнить меня</span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Войти" class="btn btn-light btn-outline-dark" />
@@ -83,3 +83,4 @@
     </div>
     <div class="flex-row ml-auto"><img style="width:35rem;" src="~/images/soldier.png" /></div>
 </div>
+

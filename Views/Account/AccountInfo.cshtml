@@ -1,0 +1,103 @@
+﻿@model User;
+
+@{ ViewData["Title"] = "Аккаунт";}
+<style>
+    h2 {
+        padding-bottom: 1.5rem;
+    }
+
+    h5 {
+        padding-bottom: 0.35rem;
+    }
+
+    .nav {
+        background-image: url("http://bgrounds.ru/_include/img/bgs/scratone/white-scratone.png");
+        border: 2px rgba(0, 0, 0, 0.25) dotted;
+        padding: 1.05rem;
+    }
+
+    li {
+        list-style: none;
+        padding-bottom: 0.35rem;
+        font-size: 1.15rem;
+    }
+
+    ul {
+        padding-left: 1.25rem;
+    }
+
+    input {
+        margin-bottom: 1.5rem;
+    padding-right:.5rem;
+    padding-left:.35rem;
+    padding-top:.35rem;
+    padding-bottom:.25rem;
+        }
+    .btn{
+        margin-bottom:.35rem;
+        margin-left:.35rem;
+        cursor:pointer;
+        height:2.33rem;
+        border:none;
+    }
+
+</style>
+<h2 class="text-center">Аккаунт</h2>
+<hr />
+
+<div class="row">
+    <div class="col-lg-3 col-xs-12">
+        <div class="nav">
+            <h5>@User.Identity.Name.Split('@')[0]</h5>
+            <ul>
+
+                <li class="active"><a href="#">Данные</a></li>
+                <li><a href="#">Мои заказы</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-9 col-xs-12">
+        <div>
+            <label>Имя</label><br />
+            <input type="text" value="@Model.FirstName" disabled="disabled" />
+        </div>
+        <div>
+            <label>Фамилия</label><br />
+            <input type="text" value="@Model.LastName" disabled="disabled" />
+        </div>  
+        <div>
+            <label>Имя пользователя</label><br />
+            <input type="text" value="@Model.Login" disabled="disabled" />
+        </div>
+        <div>
+            <label>Номер телефона</label><br />
+            <input type="text" id="phone" value="@Model.PhoneNumber" />
+            <div class="btn btn-dark" id="editPhone">Изменить</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var btn = document.getElementById('editPhone');
+    
+    btn.addEventListener("click", function () {
+        var Number = $('#phone').val();
+        var p = {
+            Number: phone
+        };
+        $.ajax({
+            url: '@Url.Content("~/")' + 'Account/UpdatePhoneNumber',            
+            type: "POST",            
+            data: { Number: Number },
+            error: function (xmlHttpRequest, errorText, thrownError) {
+                alert(xmlHttpRequest + "|" + errorText + "|" + thrownError);
+            },
+            success: function (data) {
+                
+            }
+        })
+    })
+    
+</script>

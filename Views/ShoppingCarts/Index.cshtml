@@ -33,7 +33,9 @@
         padding-bottom: 2.5rem
     }
 
-    
+
+    button {
+    }
 
     #totalCost {
         text-align: right !important;
@@ -42,7 +44,12 @@
 
 
 <h2>Корзина покупок</h2>
-
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="alert alert-primary" role="alert">
+        Чтобы добавить товары, которые были у Вас в корзине до входа в аккаунт, нажмите <a href="#" onclick="ImportItems()">сюда</a>.
+    </div>
+}
 @if (!Model.CartItem.Any())
 {
     <hr />
@@ -51,10 +58,10 @@
     <div class="d-flex justify-content-center"><img id="feelings" style="width:30rem" src="~/images/sadface.png" /></div>
 }
 else
-{
-    <div class="toast" data-delay="3000" style="position: absolute; top: 2rem; right: 2rem;">
-        <div class="toast-header">
 
+{
+    <div class="toast" data-delay="3000" style="position: absolute; top: 5.2rem; right: 2rem;">
+        <div class="toast-header">
             <strong class="mr-auto">Wahama Shop</strong>
             <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
@@ -86,6 +93,7 @@ else
         <tbody>
 
 
+
             @foreach (var item in Model.CartItem)
             {
                 string inputId = "quantityInput" + item.ProductId.ToString();
@@ -113,12 +121,29 @@ else
         </tbody>
     </table>
 
-    <h3 id="totalCost" class=""></h3>
+    <h3 id="totalCost"></h3>
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary">Оформить заказ</button>
+    </div>
 }
 
 <script>
-    $(document).ready(GetTotalCost());    
-
+    $(document).ready(GetTotalCost());
+    function ImportItems() {
+        $.ajax({
+            url: '@Url.Content("~/")' + 'ShoppingCarts/ImportUnauthorizedCartToAccount',
+            contentType: "application/x-www-form/urlencoded",
+            type: "POST",
+            datatype: "json",
+             error: function (xmlHttpRequest, errorText, thrownError) {
+                alert(xmlHttpRequest + "|" + errorText + "|" + thrownError);
+            },
+            success: function (data) {
+                location.reload();
+            }
+        })
+    }
     function GetTotalCost() {
         var param = {
             userId: "CurrentUser"
@@ -140,15 +165,15 @@ else
 
                 }
             }
-        });      
+        });
     }
 
     function RemoveFromCart(productId) {
         var _this = $(this);
         var param = {
             quantityDifference: null,
-            productId: productId,
-            userId: "CurrentUser"
+            productId: productId
+
         };
         $.ajax({
             url: '@Url.Content("~/")' + 'ShoppingCarts/RemoveFromCart',
@@ -162,7 +187,7 @@ else
             },
             success: function (data) {
                 if (data != null) {
-                   
+
                     GetTotalCost();
                     location.reload()
                     $('.toast').toast('show');
@@ -176,8 +201,7 @@ else
         var qElementId = "#quantityInput" + productId;
         var param = {
             quantityDifference:$(qElementId).val() - oldQuantity,
-            productId: productId,
-            userId: "CurrentUser"
+            productId: productId
         };
         $.ajax({
             url: '@Url.Content("~/")' + 'ShoppingCarts/RemoveFromCart',
@@ -190,8 +214,7 @@ else
             },
             success: function (data) {
                 if (data != null) {
-
-                    GetTotalCost();
+                    location.reload();
                     $('.toast').toast('show');
                 }
             },
