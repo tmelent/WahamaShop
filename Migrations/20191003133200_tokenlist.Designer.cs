@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wahama;
 
 namespace Wahama.Migrations
 {
     [DbContext(typeof(WarhammerContext))]
-    partial class WarhammerContextModelSnapshot : ModelSnapshot
+    [Migration("20191003133200_tokenlist")]
+    partial class tokenlist
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,23 +135,6 @@ namespace Wahama.Migrations
                         new { Id = 3, Name = "moderator" },
                         new { Id = 4, Name = "employee" }
                     );
-                });
-
-            modelBuilder.Entity("Wahama.Models.TokenList", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("ExpirationDate");
-
-                    b.Property<string>("Guid");
-
-                    b.Property<string>("Login");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TokenList");
                 });
 
             modelBuilder.Entity("Wahama.Models.User", b =>

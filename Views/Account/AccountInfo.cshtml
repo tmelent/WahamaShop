@@ -28,19 +28,19 @@
 
     input {
         margin-bottom: 1.5rem;
-    padding-right:.5rem;
-    padding-left:.35rem;
-    padding-top:.35rem;
-    padding-bottom:.25rem;
-        }
-    .btn{
-        margin-bottom:.35rem;
-        margin-left:.35rem;
-        cursor:pointer;
-        height:2.33rem;
-        border:none;
+        padding-right: .5rem;
+        padding-left: .35rem;
+        padding-top: .35rem;
+        padding-bottom: .25rem;
     }
 
+    .btn {
+        margin-bottom: .35rem;
+        margin-left: .35rem;
+        cursor: pointer;
+        height: 2.33rem;
+        border: none;
+    }
 </style>
 <h2 class="text-center">Аккаунт</h2>
 <hr />
@@ -65,10 +65,23 @@
         <div>
             <label>Фамилия</label><br />
             <input type="text" value="@Model.LastName" disabled="disabled" />
-        </div>  
+        </div>
         <div>
             <label>Имя пользователя</label><br />
             <input type="text" value="@Model.Login" disabled="disabled" />
+        </div>
+        <div>
+            <label>Старый пароль</label><br />
+            <input type="password" id="oldPassword" />            
+        </div>
+        <div>
+            <label>Новый пароль</label><br />
+            <input type="password" id="newPassword"/>           
+        </div>
+        <div>
+            <label>Подтвердите новый пароль</label><br />
+            <input type="password" id="newPasswordConfirmation" />
+            <div class="btn btn-dark" id="updatePassword">Обновить пароль</div>
         </div>
         <div>
             <label>Номер телефона</label><br />
@@ -80,24 +93,50 @@
 </div>
 
 <script>
-    var btn = document.getElementById('editPhone');
-    
-    btn.addEventListener("click", function () {
+    var phoneBtn = document.getElementById('editPhone');
+    var pwBtn = document.getElementById('updatePassword');
+
+    phoneBtn.addEventListener("click", function () {
         var Number = $('#phone').val();
         var p = {
             Number: phone
         };
         $.ajax({
-            url: '@Url.Content("~/")' + 'Account/UpdatePhoneNumber',            
-            type: "POST",            
+            url: '@Url.Content("~/")' + 'Account/UpdatePhoneNumber',
+            type: "POST",
             data: { Number: Number },
             error: function (xmlHttpRequest, errorText, thrownError) {
                 alert(xmlHttpRequest + "|" + errorText + "|" + thrownError);
             },
             success: function (data) {
-                
+
             }
         })
-    })
-    
+    });
+
+    pwBtn.addEventListener("click", function () {
+        var passwordModel = {
+            oldPassword : $('#oldPassword').val(),
+            newPassword : $('#newPassword').val(),
+            newPasswordConfirmation : $('#newPasswordConfirmation').val()
+        }
+        if (passwordModel.newPassword === passwordModel.newPasswordConfirmation) {
+            $.ajax({
+                url: '@Url.Content("~/")' + 'Account/ChangePassword',
+                type: "POST",
+                data: passwordModel,
+                error: function () {
+                    alert("Произошла ошибка")
+                },
+                success: function (data) {                    
+                }
+            })
+        } else {
+            
+            alert("Проверьте, правильно ли указан пароль!");
+        }
+    });
+
+
+
 </script>

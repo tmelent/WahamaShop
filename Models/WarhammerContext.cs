@@ -34,6 +34,7 @@ namespace Wahama
         public virtual DbSet<WarehouseList> WarehouseList { get; set; }
         public virtual DbSet<WarehouseProducts> WarehouseProducts { get; set; }
 
+        public virtual DbSet<TokenList> TokenList { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)

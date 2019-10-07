@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Wahama.Models
 {
-    public class Phone
+    public class Phone 
     {
-       public string Number { get; set; } 
+        public string Number { get; set; } // для передачи через AJAX 
     }
 }
