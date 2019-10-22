@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using Wahama.Models;
+using System.IO;
 
 namespace Wahama.Controllers
 {
@@ -74,15 +75,15 @@ namespace Wahama.Controllers
             {
                 ToAddress = user.Login,
                 ToName = user.FirstName,
-                Subject = "Ваш пароль был изменён",                
+                Subject = "Ваш пароль был изменён",
                 MessageText = new TextPart("html")
                 {
-                    Text = "<div style='text-align:center'>"+
+                    Text = "<div style='text-align:center'>" +
                     "<h2>Wahama Shop</h2>" +
                     "<hr />" +
-                    "<h3>Здравствуйте! Ваш пароль был успешно восстановлен. </h3>" +                     
+                    "<h3>Здравствуйте! Ваш пароль был успешно восстановлен. </h3>" +
                     "<div><h4>Если это действие совершали не Вы, свяжитесь с службой поддержки Wahama Shop.</div>" +
-                    "<img src='https://i.kym-cdn.com/photos/images/facebook/001/337/806/df6.png' style='width:250px'/>"+
+                    "<img src='https://i.kym-cdn.com/photos/images/facebook/001/337/806/df6.png' style='width:250px'/>" +
                     "</div>"
                 }
             }) ;
@@ -90,13 +91,14 @@ namespace Wahama.Controllers
         [HttpPost]
         public void UpdatePassword(string newPassword, string mail)
         {
-            AccountController accountController1 = new AccountController(_context);
-            User user = _context.Users.Where(p => p.Login == mail).FirstOrDefault();
-            user.Password = accountController1.HashPassword(newPassword);                   
-            _context.Users.Update(user);
-            
-            _context.SaveChanges();
-            MailPasswordNotification(mail);
+            using (AccountController accountController1 = new AccountController(_context))
+            {
+                User user = _context.Users.Where(p => p.Login == mail).FirstOrDefault();
+                user.Password = accountController1.HashPassword(newPassword);
+                _context.Users.Update(user);
+                _context.SaveChanges();
+                MailPasswordNotification(mail);
+            }
         }
 
         public IActionResult Index()
