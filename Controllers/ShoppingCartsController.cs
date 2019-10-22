@@ -109,7 +109,7 @@ namespace Wahama.Controllers
             foreach (var item in unauthorizedItemsList)
             {
                 item.UserId = GetUserId();
-                _context.Update(item);
+                _context.Update(item); 
                 _context.SaveChanges();
             }
         }
