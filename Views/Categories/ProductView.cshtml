@@ -101,7 +101,7 @@
     function AddToCart (productId) {
         var param = {
             quantity: $('#quantity').val(),
-            productId: productId            
+            productId: productId
         };
         $.ajax({
         url: '@Url.Content("~/")' + 'ShoppingCarts/AddToCart',

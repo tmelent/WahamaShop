@@ -35,8 +35,7 @@ namespace Wahama
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            WarhammerContext _context = new WarhammerContext();
-            AccountController accountController = new AccountController(_context);
+
 
             if (env.IsDevelopment())
             {
@@ -49,7 +48,8 @@ namespace Wahama
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-
+            WarhammerContext _context = new WarhammerContext();
+            AccountController accountController = new AccountController(_context);
             app.Use(async (context, next) =>
         {
 
@@ -75,7 +75,7 @@ namespace Wahama
                     ExpirationDate = DateTime.Now.AddDays(14)
                 }, true);
             }
-            
+
             await next();
         });
             accountController.Dispose();

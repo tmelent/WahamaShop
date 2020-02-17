@@ -139,8 +139,15 @@ namespace Wahama.Controllers
             ViewBag.Total = GetTotalCost();
 
             Dictionary<int, string> productImages = GetImagesByIds();
-            OrderViewModel pvm = new OrderViewModel { ImageSources = productImages, CartItem = cartItems, Products = product, Address = address, Customer = customer, Order = order, Check = check };
-            return View(pvm);
+            OrderViewModel ovm = new OrderViewModel { ImageSources = productImages, 
+                CartItem = cartItems,
+                Products = product, 
+                Address = address, 
+                Customer = customer,
+                Order = order,
+                Check = check
+            };
+            return View(ovm);
         }
 
 
@@ -188,7 +195,7 @@ namespace Wahama.Controllers
             };
             _context.Address.Add(thisAddress);
             _context.SaveChanges(); // Сначала создается адрес, потом сохраняется БД, берется айди и создается с ним Customer
-            // Может, как-то можно это переделать? 
+            
 
             Customer customer1 = new Customer
             {

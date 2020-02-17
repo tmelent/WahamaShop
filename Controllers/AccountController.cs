@@ -57,11 +57,10 @@ namespace Wahama.Controllers
             byte[] hash = pbkdf2.GetBytes(20);
             byte[] hashBytes = new byte[36];
             Array.Copy(salt, 0, hashBytes, 0, 16);
-            Array.Copy(hash, 0, hashBytes, 16, 20);
-            
-            return Convert.ToBase64String(hashBytes);
-            
+            Array.Copy(hash, 0, hashBytes, 16, 20);            
+            return Convert.ToBase64String(hashBytes);            
         }
+
         public bool ComparePassword(string login, string password)
         {
             string savedPasswordHash = _context.Users.Where(u => u.Login == login).Select(p => p.Password).FirstOrDefault();
@@ -131,7 +130,7 @@ namespace Wahama.Controllers
                                 user = new User
                                 {
                                     Login = model.Login,
-                                    Password = model.Password,
+                                    Password = HashPassword(model.Password),
                                     FirstName = model.FirstName,
                                     LastName = model.FirstName,
                                     PhoneNumber = model.PhoneNumber,
