@@ -18,7 +18,7 @@ namespace Wahama.Controllers
         public void SendMessage(MailMessage mailMessage)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("wahama", "wahstf@mailpostservice.n23"));
+            message.From.Add(new MailboxAddress("wahama", "waasstf@mailpostsearvice.n23"));
             message.To.Add(new MailboxAddress(mailMessage.ToName, mailMessage.ToAddress));
             message.Subject = mailMessage.Subject;
             message.Body = mailMessage.MessageText;
@@ -28,7 +28,7 @@ namespace Wahama.Controllers
                 try
                 {
                     client.Connect("smtp.gmail.com", 587, false);
-                    client.Authenticate("wahstf@mailpostservice.n23", "pq2LIpqwS9158259FFQ");
+                    client.Authenticate("waasstf@mailpostseasrvice.n23", "pwpwpwpwpwpwpwpw");
                     client.Send(message);
                     client.Disconnect(true);
                     Console.WriteLine("Message has been sent.");
